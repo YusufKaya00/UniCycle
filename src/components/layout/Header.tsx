@@ -75,6 +75,11 @@ export default function Header() {
                                             <Link href="/my-listings" className="block px-3 py-2 text-sm rounded-md hover:bg-secondary transition-colors">
                                                 My Listings
                                             </Link>
+                                            {user.isAdmin && (
+                                                <Link href="/admin" className="block px-3 py-2 text-sm rounded-md hover:bg-secondary transition-colors text-primary font-medium">
+                                                    🛡️ Admin Panel
+                                                </Link>
+                                            )}
                                             <button
                                                 onClick={handleSignOut}
                                                 className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-secondary transition-colors text-destructive"

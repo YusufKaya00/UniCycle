@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -10,7 +10,7 @@ import ListingCard from '@/components/listings/ListingCard';
 import { Listing } from '@/lib/types';
 import { CATEGORIES, CONDITIONS, CategoryId } from '@/lib/constants';
 
-export default function ListingsPage() {
+function ListingsContent() {
     const searchParams = useSearchParams();
     const [listings, setListings] = useState<Listing[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -233,5 +233,34 @@ export default function ListingsPage() {
 
             <Footer />
         </div>
+    );
+}
+
+export default function ListingsPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex flex-col bg-background">
+                <Header />
+                <main className="flex-1 py-8">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="h-8 w-48 skeleton rounded mb-4"></div>
+                        <div className="h-4 w-64 skeleton rounded mb-8"></div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {[...Array(8)].map((_, i) => (
+                                <div key={i} className="card">
+                                    <div className="aspect-square skeleton mb-3"></div>
+                                    <div className="h-4 skeleton mb-2 w-1/3"></div>
+                                    <div className="h-5 skeleton mb-2"></div>
+                                    <div className="h-4 skeleton w-1/2"></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        }>
+            <ListingsContent />
+        </Suspense>
     );
 }
