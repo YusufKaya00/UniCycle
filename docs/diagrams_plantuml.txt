@@ -1,0 +1,162 @@
+Below are the updated PlantUML codes in English, designed to look exactly like the diagrams found in your Requirement Specification PDF. You can continuously copy and paste them into https://plantuml.com/plantuml/ to generate the images.
+
+---
+
+### Figure 1. Simplified system model diagram
+
+```plantuml
+@startuml
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor black
+skinparam shadowing false
+skinparam RoundCorner 0
+hide empty members
+
+class User 
+
+class "1." as step1
+class "2." as step2
+class "3." as step3
+class "4." as step4
+
+User -right-> step1 
+step1 -right-> step2
+step2 -right-> step3
+step3 -right-> step4
+
+note left of User
+User
+end note
+@enduml
+```
+*(Note: Figure 1 in the PDF is just circles/boxes numbered 1 to 4 connected in a loop with a "User" box on the side. The PDF actually depicts arrows looping from User -> 1 -> 2 -> 3 -> 4 -> 1. Here is a closer match to that visual looping structure:)*
+
+```plantuml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+node "User" as user
+circle "1." as n1
+circle "2." as n2
+circle "3." as n3
+circle "4." as n4
+
+user -right-> n1
+n1 -right-> n2
+n2 -right-> n3
+n3 -right-> n4
+n4 -up-> user : 5.
+@enduml
+```
+
+---
+
+### Figure 2. System environment diagram
+
+```plantuml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+left to right direction
+
+rectangle "User" as User
+rectangle "Interface" as Interface
+rectangle "System\nFunctions" as System
+rectangle "Database" as Database
+
+User <--> Interface
+Interface <--> System
+System <--> Database
+@enduml
+```
+
+---
+
+### Figure 3. Hierarchical view diagram
+
+```plantuml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+rectangle "Information Spaces" as Info
+
+rectangle "Opinions about users and\n their classes" as Users
+rectangle "Opinions about non-functional\n requirements" as NonFunctional
+rectangle "Opinions about functional\n requirements: system functions\n and functions available to users" as Functional
+rectangle "Opinions about the\n database and its objects" as Database
+
+rectangle "Buyer" as Buyer
+rectangle "Seller" as Seller
+
+Info -down-> Users
+Info -down-> NonFunctional
+Info -down-> Functional
+Info -down-> Database
+
+Users -down-> Buyer
+Users -down-> Seller
+@enduml
+```
+
+---
+
+### Figure 4. User registration/authorization activity diagram
+
+```plantuml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+title User registration/authorization activity diagram
+
+start
+:Enter system;
+:Provide Authorization details
+(Google Login);
+if (Domain is @edu.rtu.lv?) then (yes)
+  :Validate user details;
+  if (Valid account?) then (yes)
+    :Authorize User;
+    :Access System Functions;
+  else (no)
+    :Register User in Database;
+    :Authorize User;
+    :Access System Functions;
+  endif
+else (no)
+  :Display Error Message;
+  :Deny Access;
+endif
+stop
+@enduml
+```
+
+---
+
+### Figure 5. Function activity diagram (e.g., Adding a Listing)
+
+```plantuml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+title Function activity diagram
+
+start
+:Seller enters listing info;
+:Input data:
+- Title, Category, Price
+- Images
+- Location (Map);
+if (Is data valid?) then (yes)
+  :Save data to database;
+  :Display success message;
+  :Show updated listings;
+else (no)
+  :Display error message;
+endif
+stop
+@enduml
+```
