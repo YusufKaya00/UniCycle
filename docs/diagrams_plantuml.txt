@@ -1,36 +1,32 @@
-Below are the updated PlantUML codes in English, designed to look exactly like the diagrams found in your Requirement Specification PDF. You can continuously copy and paste them into https://plantuml.com/plantuml/ to generate the images.
+Bu dosyada, UniCycle projenizin gereksinimlerine ve [Example] Requirement_Specification.pdf dosyasındaki görsel stile (siyah-beyaz, gölgesiz vb.) uygun olan PlantUML kodları bulunmaktadır.
+
+Bu kodları https://plantuml.com/plantuml/ adresine yapıştırarak diyagramları oluşturabilirsiniz.
 
 ---
 
 ### Figure 1. Simplified system model diagram
 
+Aşağıdaki diyagram, docx'teki "Client -> Next.js Application -> Firebase / APIs" akışını ve dokümanda belirtilen 5 adımı PDF'teki numaralandırılmış döngü stiliyle birleştirerek sunar:
+
 ```plantuml
 @startuml
-skinparam ClassBackgroundColor white
-skinparam ClassBorderColor black
+skinparam monochrome true
 skinparam shadowing false
-skinparam RoundCorner 0
-hide empty members
+left to right direction
 
-class User 
+rectangle "Client\n(User)" as client
+rectangle "Next.js\nApplication" as nextjs
+rectangle "Firebase / APIs" as firebase
 
-class "1." as step1
-class "2." as step2
-class "3." as step3
-class "4." as step4
+client -> nextjs : 1. Login\n2. Access
+nextjs -> client : 5. Real-time Updates
+nextjs -> firebase : 3. Retrieve/Add Data
+firebase -> nextjs : 4. Update Data/Storage
 
-User -right-> step1 
-step1 -right-> step2
-step2 -right-> step3
-step3 -right-> step4
-
-note left of User
-User
-end note
 @enduml
 ```
-*(Note: Figure 1 in the PDF is just circles/boxes numbered 1 to 4 connected in a loop with a "User" box on the side. The PDF actually depicts arrows looping from User -> 1 -> 2 -> 3 -> 4 -> 1. Here is a closer match to that visual looping structure:)*
 
+*(Eğer PDF'teki gibi sadece yuvarlak numaralar isteniyorsa, şu alternatif kullanılabilir:)*
 ```plantuml
 @startuml
 skinparam monochrome true
@@ -54,6 +50,8 @@ n4 -up-> user : 5.
 
 ### Figure 2. System environment diagram
 
+Belirtilen "User interacting with web interface, and system communicating with Firebase and Google APIs" tanımına uygun ortam diyagramı:
+
 ```plantuml
 @startuml
 skinparam monochrome true
@@ -61,9 +59,9 @@ skinparam shadowing false
 left to right direction
 
 rectangle "User" as User
-rectangle "Interface" as Interface
+rectangle "Web\nInterface" as Interface
 rectangle "System\nFunctions" as System
-rectangle "Database" as Database
+rectangle "Firebase &\nGoogle APIs" as Database
 
 User <--> Interface
 Interface <--> System
@@ -75,6 +73,8 @@ System <--> Database
 
 ### Figure 3. Hierarchical view diagram
 
+UniCycle için rollerin (buyers and sellers) ve gereksinimlerin (functional ve non-functional) kırılımı:
+
 ```plantuml
 @startuml
 skinparam monochrome true
@@ -82,9 +82,9 @@ skinparam shadowing false
 
 rectangle "Information Spaces" as Info
 
-rectangle "Opinions about users and\n their classes" as Users
-rectangle "Opinions about non-functional\n requirements" as NonFunctional
-rectangle "Opinions about functional\n requirements: system functions\n and functions available to users" as Functional
+rectangle "Opinions about users\n and their roles" as Users
+rectangle "Opinions about\n non-functional requirements" as NonFunctional
+rectangle "Opinions about\n functional requirements" as Functional
 rectangle "Opinions about the\n database and its objects" as Database
 
 rectangle "Buyer" as Buyer
@@ -104,6 +104,8 @@ Users -down-> Seller
 
 ### Figure 4. User registration/authorization activity diagram
 
+"@edu.rtu.lv" mail uzantısını içeren Google girişi akışını gösteren aktivite diyagramı:
+
 ```plantuml
 @startuml
 skinparam monochrome true
@@ -114,7 +116,7 @@ title User registration/authorization activity diagram
 start
 :Enter system;
 :Provide Authorization details
-(Google Login);
+(Google Sign-In);
 if (Domain is @edu.rtu.lv?) then (yes)
   :Validate user details;
   if (Valid account?) then (yes)
@@ -137,21 +139,24 @@ stop
 
 ### Figure 5. Function activity diagram (e.g., Adding a Listing)
 
+Satıcının Google Maps lokasyonu gibi bilgileri de ekleyerek ilan oluşturduğu ana fonksiyon akışı:
+
 ```plantuml
 @startuml
 skinparam monochrome true
 skinparam shadowing false
 
-title Function activity diagram
+title Function activity diagram (Adding a Listing)
 
 start
 :Seller enters listing info;
 :Input data:
-- Title, Category, Price
+- Title, Description, Category, Price
 - Images
-- Location (Map);
+- Location (Google Maps);
 if (Is data valid?) then (yes)
-  :Save data to database;
+  :Save listing to Firestore;
+  :Upload images to Storage;
   :Display success message;
   :Show updated listings;
 else (no)

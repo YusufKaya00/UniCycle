@@ -39,22 +39,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
             if (fbUser) {
                 setFirebaseUser(fbUser);
-                // Fetch user data from Firestore
-                const userDoc = await getDoc(doc(db, 'users', fbUser.uid));
-                if (userDoc.exists()) {
-                    setUser({ uid: fbUser.uid, ...userDoc.data() } as User);
-                } else {
-                    // Create user document if it doesn't exist
-                    const newUser: Omit<User, 'uid'> = {
-                        email: fbUser.email || '',
-                        displayName: fbUser.displayName || '',
-                        photoURL: fbUser.photoURL || null,
-                        university: 'Riga Technical University',
-                        createdAt: serverTimestamp() as any,
-                        isAdmin: false,
-                    };
-                    await setDoc(doc(db, 'users', fbUser.uid), newUser);
-                    setUser({ uid: fbUser.uid, ...newUser } as User);
+                try {
+                    // Fetch user data from Firestore
+                    const userDoc = await getDoc(doc(db, 'users', fbUser.uid));
+                    if (userDoc.exists()) {
+                        setUser({ uid: fbUser.uid, ...userDoc.data() } as User);
+                    } else {
+                        // Create user document if it doesn't exist
+                        const newUser: Omit<User, 'uid'> = {
+                            email: fbUser.email || '',
+                            displayName: fbUser.displayName || '',
+                            photoURL: fbUser.photoURL || null,
+                            university: 'Riga Technical University',
+                            createdAt: serverTimestamp() as any,
+                            isAdmin: false,
+                        };
+                        await setDoc(doc(db, 'users', fbUser.uid), newUser);
+                        setUser({ uid: fbUser.uid, ...newUser } as User);
+                    }
+                } catch (err: any) {
+                    console.error("Error fetching or creating user document:", err);
+                    setError(err.message || "Failed to load user profile due to permissions.");
+                    setFirebaseUser(null);
+                    setUser(null);
                 }
             } else {
                 setFirebaseUser(null);
