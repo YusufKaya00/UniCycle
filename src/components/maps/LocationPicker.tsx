@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { Location } from '@/lib/types';
+import { GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_API_KEY } from '@/lib/googleMaps';
 
 interface LocationPickerProps {
     value: Location | null;
@@ -31,8 +32,8 @@ const mapOptions = {
 
 export default function LocationPicker({ value, onChange }: LocationPickerProps) {
     const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-        libraries: ['places'],
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+        libraries: GOOGLE_MAPS_LIBRARIES,
     });
 
     const [searchInput, setSearchInput] = useState('');
